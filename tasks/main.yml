@@ -3,15 +3,18 @@
   yum:
     name: python-netaddr
     state: present
+  become: yes
 - name: create /etc/ansible/hosts
   copy:
     src: hosts
     dest: /etc/ansible/hosts
+  become: yes
 - name: create configure_hosts.yml
   copy:
     src: configure_hosts.yml
     dest: /etc/ansible/configure_hosts.yml
-- name: Create startup.sh
+  become: yes
+- name: "Create {{ ansible_env.HOME }}/startup.sh"
   copy:
     src: startup.sh
     dest: "{{ ansible_env.HOME }}/startup.sh"
@@ -28,6 +31,7 @@
     STUDENT=$(echo {{ ansible_default_ipv4.address }} | cut -d. -f3)
     echo "10.0.${STUDENT}.0"
   register: network
+  become: yes
 - name: Configure Hosts | Echo network.stdout
   debug:
     msg: "This network is {{ network.stdout }}"
@@ -43,6 +47,7 @@
   file:
     state: touch
     path: "{{ hosts_file }}"
+  become: yes
 - name: "Configure Hosts | Add mappings to {{ hosts_file }}"
   blockinfile:
     path: "{{ hosts_file }}"
@@ -50,3 +55,4 @@
       {{ network.stdout | ipmath(item.last_octet) }}  {{ item.name }} {{ item.name }}.{{ domain_suffix }}
     marker: "# {mark} ANSIBLE MANAGED BLOCK {{ item.name }}"
   loop: "{{ lab_systems }}"
+  become: yes
