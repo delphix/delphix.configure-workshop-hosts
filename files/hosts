@@ -1,0 +1,37 @@
+# This file is managed by Ansible. Don't make changes here - they will be overwritten.
+localhost ansible_connection=local
+
+[all:vars]
+ansible_ssh_private_key_file=~/.ssh/ansible
+
+[centos:vars]
+ansible_user=centos
+
+[azn:vars]
+ansible_user=ec2-user
+
+[azn]
+
+[centos]
+datical-server
+tooling
+
+[centos:children]
+db
+web
+
+[db]
+proddb
+devdb
+
+[web]
+prodweb
+devweb
+testweb
+
+[linux:children]
+centos
+azn
+
+[ubuntu]
+guacamole ansible_user=ubuntu

@@ -1,0 +1,52 @@
+---
+- name: Install python-netaddr
+  yum:
+    name: python-netaddr
+    state: present
+- name: create /etc/ansible/hosts
+  copy:
+    src: hosts
+    dest: /etc/ansible/hosts
+- name: create configure_hosts.yml
+  copy:
+    src: configure_hosts.yml
+    dest: /etc/ansible/configure_hosts.yml
+- name: Create startup.sh
+  copy:
+    src: startup.sh
+    dest: "{{ ansible_env.HOME }}/startup.sh"
+    mode: "u+x,g+x"
+  become: no
+- name: Creates the reboot crontab for WAIT/READY 
+  cron:
+    name: "Update the /etc/hosts file on boot"
+    special_time: reboot
+    job: "{{ ansible_env.HOME }}/startup.sh"
+  become: no
+- name: Configure Hosts | Register network as the /24 network
+  shell: |
+    STUDENT=$(echo {{ ansible_default_ipv4.address }} | cut -d. -f3)
+    echo "10.0.${STUDENT}.0"
+  register: network
+- name: Configure Hosts | Echo network.stdout
+  debug:
+    msg: "This network is {{ network.stdout }}"
+- name: Configure Hosts | set hosts_file as /etc/hosts for VM
+  set_fact:
+    hosts_file: /etc/hosts
+  when: not in_container
+- name: Configure Hosts | set hosts_file as /tmp/hosts for molecule container
+  set_fact:
+    hosts_file: /tmp/hosts #we just test the creation of the file
+  when: in_container
+- name: "Configure Hosts | create {{ hosts_file }} for molecule container"
+  file:
+    state: touch
+    path: "{{ hosts_file }}"
+- name: "Configure Hosts | Add mappings to {{ hosts_file }}"
+  blockinfile:
+    path: "{{ hosts_file }}"
+    block: |
+      {{ network.stdout | ipmath(item.last_octet) }}  {{ item.name }} {{ item.name }}.{{ domain_suffix }}
+    marker: "# {mark} ANSIBLE MANAGED BLOCK {{ item.name }}"
+  loop: "{{ lab_systems }}"
