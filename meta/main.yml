@@ -1,0 +1,26 @@
+#
+# Copyright (c) 2019 by Delphix. All rights reserved.
+#
+---
+galaxy_info:
+  author: CloudSurgeon
+  description: Delphix Workshop AMI hosts configuration
+  company: Delphix
+  license: Apache
+  min_ansible_version: 2.7
+  platforms:
+    - name: EL
+      versions:
+        - all
+    - name: Debian
+      versions:
+        - all
+    - name: Ubuntu
+      versions:
+        - trusty
+        - xenial
+        - bionic
+  galaxy_tags:
+    - delphix
+
+dependencies: []
