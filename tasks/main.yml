@@ -1,4 +1,10 @@
 ---
+- name: Configure Hosts | Install delphix.configure-workshop-hosts
+  shell: |
+    ansible-galaxy install git+https://github.com/delphix/delphix.configure-workshop-hosts.git
+  args:
+    creates: "{{ ansible_env.HOME }}/.ansible/roles/delphix.configure-workshop-hosts"
+  become: no
 - name: Install python-netaddr
   yum:
     name: python-netaddr

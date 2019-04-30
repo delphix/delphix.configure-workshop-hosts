@@ -4,7 +4,6 @@
 ---
   - name: Configure Hosts | Configure the /etc/hosts file to contain local env information
     hosts: all
-    become: yes
     vars:
     roles:
       - role: delphix.configure-workshop-hosts
