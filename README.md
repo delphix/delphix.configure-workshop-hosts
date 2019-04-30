@@ -1,4 +1,4 @@
-Delphix Target Host
+Delphix Configure Workshop Hosts
 ===================
 
 <!-- [![Build Status](https://travis-ci.com/delphix/ansible-target-host.svg?branch=master)](https://travis-ci.com/delphix/ansible-target-host) -->
