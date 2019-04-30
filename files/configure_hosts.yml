@@ -7,4 +7,4 @@
     become: yes
     vars:
     roles:
-      - role: configure_hosts
+      - role: delphix.configure-workshop-hosts
