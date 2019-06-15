@@ -10,6 +10,10 @@
     name: python-netaddr
     state: present
   become: yes
+- name: Ensures /etc/ansible dir exists
+  file:
+    path: /etc/ansible
+    state: directory
 - name: create /etc/ansible/hosts
   copy:
     src: hosts
@@ -26,7 +30,7 @@
     dest: "{{ ansible_env.HOME }}/startup.sh"
     mode: "u+x,g+x"
   become: no
-- name: Creates the reboot crontab for WAIT/READY 
+- name: Creates the reboot crontab for WAIT/READY
   cron:
     name: "Update the /etc/hosts file on boot"
     special_time: reboot
