@@ -2,8 +2,8 @@
 # Copyright (c) 2011, 2019 by Delphix. All rights reserved.
 #
 ---
-  - name: Configure Hosts | Configure the /etc/hosts file to contain local env information
-    hosts: all
-    vars:
-    roles:
-      - role: delphix.configure-workshop-hosts
+- name: Configure Hosts | Configure the /etc/hosts file to contain local env information
+  hosts: all
+  vars:
+  roles:
+    - role: delphix.configure-workshop-hosts
