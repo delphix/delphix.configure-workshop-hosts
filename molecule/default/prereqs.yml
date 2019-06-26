@@ -1,0 +1,27 @@
+---
+- name: Set in_container
+  set_fact:
+    in_container: true
+
+# Red Hat.
+- name: Install requirements for RedHat
+  yum:
+    name: "{{ packages }}"
+    state: present
+    update_cache: true
+  vars:
+    packages:
+      - git
+      - cronie
+  when: ansible_os_family == 'RedHat'
+
+# Ubuntu.
+- name: Install requirements for Ubuntu
+  apt:
+    name: "{{ packages }}"
+    state: present
+  become: true
+  vars:
+    packages:
+      - git
+  when: ansible_distribution == 'Ubuntu'

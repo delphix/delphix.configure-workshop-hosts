@@ -1,7 +1,7 @@
 ---
 - name: Converge
   hosts: all
+  pre_tasks:
+    - include_tasks: prereqs.yml
   roles:
     - role: delphix.configure-workshop-hosts
-  vars:
-    in_container: true
