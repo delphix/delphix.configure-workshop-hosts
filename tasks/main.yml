@@ -39,10 +39,12 @@
   become: no
 - name: Configure Hosts | Register network as the /24 network
   shell: |
+    set -o pipefail
     STUDENT=$(echo {{ ansible_default_ipv4.address }} | cut -d. -f3)
     echo "10.0.${STUDENT}.0"
   register: network
   become: yes
+  changed_when: "network.rc == 0"
 - name: Configure Hosts | Echo network.stdout
   debug:
     msg: "This network is {{ network.stdout }}"
@@ -52,7 +54,8 @@
   when: not in_container
 - name: Configure Hosts | set hosts_file as /tmp/hosts for molecule container
   set_fact:
-    hosts_file: /tmp/hosts #we just test the creation of the file
+    # we just test the creation of the file
+    hosts_file: /tmp/hosts
   when: in_container
 - name: "Configure Hosts | create {{ hosts_file }} for molecule container"
   file:
