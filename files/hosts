@@ -35,3 +35,4 @@ azn
 
 [ubuntu]
 guacamole ansible_user=ubuntu
+jumpbox ansible_user=ubuntu
