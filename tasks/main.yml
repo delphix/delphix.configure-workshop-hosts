@@ -65,9 +65,8 @@
     state: touch
     path: "{{ hosts_file }}"
   register: file_created
+  become: yes
   changed_when: file_created.changed == "true"
-- debug:
-    msg: "{{ file_created }}"
 - name: "Configure Hosts | Add mappings to {{ hosts_file }}"
   blockinfile:
     path: "{{ hosts_file }}"
